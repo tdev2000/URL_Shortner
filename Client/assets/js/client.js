@@ -4,19 +4,25 @@ const resultURL = document.getElementById('resultURL');
 resultURL.style.display = "none";
 
 submitBtn.addEventListener('click', function () {
-    const Urlvalue = orginalUrl.value;
+    try {
+        const Urlvalue = orginalUrl.value;
     
     if (Urlvalue != " ") {
         const URL = 'http://localhost:3001/api/get-short-url?longURL=' + Urlvalue;
 
         fetch(URL).then(async function (res) {
             const data = await res.json();
-            
-            resultURL.style.display = "block";
+           if (data.status == "success") {
+                resultURL.style.display = "block";
 
-            console.log(data.response);
-            resultURL.innerHTML = data.response; 
-            resultURL.href = data.response;
+                console.log(data.response);
+                resultURL.innerHTML = data.response; 
+                resultURL.href = data.response;   
+            } 
+            else{
+                console.log("Status failed... " + data.response);
+            }
+            
         }).catch(function (err) {
             console.warn('Something went wrong.', err);
         });
@@ -24,4 +30,8 @@ submitBtn.addEventListener('click', function () {
     else {
         console.log("value not found !")
     }
+    } catch (error) {
+        console.error(error);
+    }
+    
 });

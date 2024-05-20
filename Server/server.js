@@ -22,7 +22,13 @@ app.get('/api/get-short-url', (req, res) => {
     
     shortUrl.short(longURL, function (err, url) {
         console.log(url);
-        res.send({ staus: "success", response: url });
+        if (url) {
+            res.send({ staus: "success", response: url });
+        }
+        else{
+            res.send({ staus: "failed", response: err });
+
+        }
     });
 });
 
