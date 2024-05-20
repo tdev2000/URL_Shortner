@@ -1,7 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
+// Use CORS middleware
+app.use(cors());
 const path = require('path');
-var shortUrl = require("node-url-shortener");
+const shortUrl = require("node-url-shortener");
 
 const PORT = 3001;
 
@@ -18,6 +21,7 @@ app.get('/api/get-short-url', (req, res) => {
     const longURL = req.query.longURL;
     
     shortUrl.short(longURL, function (err, url) {
+        console.log(url);
         res.send({ staus: "success", response: url });
     });
 });
