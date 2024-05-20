@@ -1,17 +1,27 @@
-document.getElementById('urlForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const originalUrl = document.getElementById('originalUrl').value;
-    try {
-        const response = await fetch('/shorten', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ originalUrl })
+const submitBtn = document.getElementById('submit_btn');
+const orginalUrl = document.getElementById('orginalUrl');
+const resultURL = document.getElementById('resultURL');
+resultURL.style.display = "none";
+
+submitBtn.addEventListener('click', function () {
+    const Urlvalue = orginalUrl.value;
+    
+    if (Urlvalue != " ") {
+        const URL = 'http://localhost:3001/api/get-short-url?longURL=' + Urlvalue;
+
+        fetch(URL).then(async function (res) {
+            const data = await res.json();
+            
+            resultURL.style.display = "block";
+
+            console.log(data.response);
+            resultURL.innerHTML = data.response; 
+            resultURL.href = data.response;
+        }).catch(function (err) {
+            console.warn('Something went wrong.', err);
         });
-        const data = await response.json();
-        document.getElementById('shortUrl').innerHTML = `<a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
-    } catch (error) {
-        console.error(error);
+    }
+    else {
+        console.log("value not found !")
     }
 });
